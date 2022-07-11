@@ -4,7 +4,7 @@
  * @arg: list of arguments
  * Return: int
  */
-int _print_char(va_list arg)
+int print_char(va_list arg)
 {
 	return (_putchar(va_arg(arg, int)));
 }
