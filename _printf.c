@@ -8,40 +8,37 @@
 
 int _printf(const char *format, ...)
 {
-	va_list args;
 	int i, j, len = 0;
-	char *str;
 
-	if (!format)
-		return (-1);
+	f_id func_list[] = {
+		{"c", _print_char},
+		{"s", _putstr},
+		{"%", _print_percent},
+		{NULL, NULL}
+	};
+
+	va_list args;
 
 	va_start(args, format);
+	if (!format)
+		return (-1); 
+
 	for (i = 0; format[i] != '\0'; i++)
 	{
 		if (format[i] != '%')
 		{
-			putchar(format[i]);
+			_putchar(format[i]);
 			len++;
 		}
 		else
 		{
-			if (format[i + 1] == 'c')
+			for (j = 0; func_list[j].id != NULL; j++)
 			{
-				putchar(va_arg(args, int));
-				len++;
-			}
-			else if (format[i + 1] == 's')
-			{
-				str = va_arg(args, char *);
-				for (j = 0; str[j] != '\0'; j++)
+				if (format[i + 1] == func_list[j].id[0])
 				{
-					putchar(str[j]);
-					len++;
+					len += func_list[j].func(args);
+					break;
 				}
-			}
-			else if (format[i + 1] == '%')
-			{
-				putchar('%');
 			}
 			i++;
 		}
